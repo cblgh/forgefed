@@ -53,11 +53,30 @@ When a user wants to fork a remote upstream branch, he / she would fill in the s
 
 ### Fork
 
-#### Workflow
+A. Initiation
 
+1. A user sees a repository on any server in the federated network
 
+2. He or she decides to make fork on his or her home-server.
+  1. He or she initiates the fork from the origin server by clicking on a fork button there.
+  2.  He or she initiates the fork from his or her homeserver by supplying the URI to the repo.B. Forking.
 
+B1. Initiated from the origin
 
+0. The user has clicked the "fork" button on the repo
+1. The server asks the user for his or her home-server
+2. The server forwards the user to his or her home server, supplying the URI
+  for the repo to be cloned. (e.g. by forwarding to https://server-b.com/fork?repo=server-a.com%2Drepo ("`%2D`" is urlencoded "`/`") the workflow now continues as initiated on the target server
+
+B2. From the target server
+
+0. The user has supplied the URL to the repo he or she wants to fork
+1. The server resolves the clone-URI using to-be-defined means (e.g. webfinger https://server-a.com/.well-known/webfinger?res=server-a%2Drepo)
+2. The server clones the repo locally (the server applies security means here as required)
+3. If the server is polite, it notifies the origin server about the fork (e.g via ActivityPub)
+4. If the target server is interested in the fork, it subscribes to updates. (e.g also AP)
+
+If the user pushes to his or her repo on server B, this will create an activity that then is distributed to the subscribers. If server A is a subscriber, it could then update the fork's history state. (E.g. by `git fetch`)
 
 ### Pull Request / Merge Request
 
