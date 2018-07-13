@@ -53,30 +53,69 @@ When a user wants to fork a remote upstream branch, he / she would fill in the s
 
 ### Fork
 
-A. Initiation
+#### A. Source Server Initiation
 
-1. A user sees a repository on any server in the federated network
+1. A user sees a repository (e.g. https://server-a.net/user-a/bar) on server A in the federated network.
+2. The page has a "Fork" button, or any other represetation. He or she initiates the fork from the origin server by clicking on a fork button there.
+3. The user clicks the "fork" button on the repo.
+4. Server A asks the user for his / her home server.
+5. The user filled in the server URL (e.g. https://server-b.net).
+6. Server A make a request to Server B to:
+  1. Make sure that it supports federation;
+  2. Find the forking endpoint to initiate the forking (e.g. https://server-b.net/fork)
+7. Server A redirects the user to the forking endpoint with the URL of the repository to fork.
+  (e.g. https://server-b.net/fork?repo=https%3A%2F%2Fserver-a.net%2Fuser-a%2Fbar)
 
-2. He or she decides to make fork on his or her home-server.
-  1. He or she initiates the fork from the origin server by clicking on a fork button there.
-  2.  He or she initiates the fork from his or her homeserver by supplying the URI to the repo.B. Forking.
+#### B. Forking
 
-B1. Initiated from the origin
+1. The user either:
+  1.  specify the repository to fork with endpoint parameter:
+    (e.g. https://server-b.net/fork?repo=https%3A%2F%2Fserver-a.net%2Fuser-a%2Fbar), or
+  2. specify the repository to fork manually:
+2. Server B resolves the clone-URI from Server A using to-be-defined means:
+  (e.g. webfinger https://server-a.net/.well-known/webfinger?res=server-a.net%2Drepo)
+3. Server B clones the repo from Server A locally (the server applies security means here as required).
+4. A new repository on Server B is created with its own URL
+  (e.g. https://server-b.net/user-b/bar)
 
-0. The user has clicked the "fork" button on the repo
-1. The server asks the user for his or her home-server
-2. The server forwards the user to his or her home server, supplying the URI
-  for the repo to be cloned. (e.g. by forwarding to https://server-b.com/fork?repo=server-a.com%2Drepo ("`%2D`" is urlencoded "`/`") the workflow now continues as initiated on the target server
+#### C. Forking Mention
 
-B2. From the target server
+If Server B is polite, it POST a notification to the inbox of source server (e.g. https://server-a.net/user-a/bar/inbox):
 
-0. The user has supplied the URL to the repo he or she wants to fork
-1. The server resolves the clone-URI using to-be-defined means (e.g. webfinger https://server-a.com/.well-known/webfinger?res=server-a%2Drepo)
-2. The server clones the repo locally (the server applies security means here as required)
-3. If the server is polite, it notifies the origin server about the fork (e.g via ActivityPub)
-4. If the target server is interested in the fork, it subscribes to updates. (e.g also AP)
+```json
+{
+  message-type: 'fork',
+  source-url: 'https://server-a.net/user-a/bar',
+  destination-url: 'https://server-b.net/user-b/bar',
+  timestamp: '2018-06-06T12:21:32.000Z'
+}
+```
 
-If the user pushes to his or her repo on server B, this will create an activity that then is distributed to the subscribers. If server A is a subscriber, it could then update the fork's history state. (E.g. by `git fetch`)
+#### D. Subscriptions between Repository
+
+A repository might be interested in displaying information considering another repository. For example,
+
+1. Source repository wants to display updates from all fork destinations; or
+
+2. Destintion repository wants to display updates of the source repository.
+
+then the repository can always subscribes to updates of the other.
+
+Say if the repository https://server-a.net/user-a/bar subscribes to the fork destination https://server-b.net/user-b/bar. If the user B pushed to https://server-b.net/user-b/bar, it will POST an activity to the inbox of subscribers, includes https://server-a.net/user-a/bar/inbox:
+
+```json
+{
+  message-type: 'push',
+  url: 'https://server-b.net/user-b/bar',?
+  vcs-type: 'git',
+  vcs-url: 'https://server-b.net/user-b/bar.git',
+  vcs-spec: 'master',
+  vcs-data: 'some-commit-hash'
+  timestamp: '2018-06-08T13:24:12.000Z'
+}
+```
+
+Server A could then update the fork's history state. (E.g. by `git fetch`).
 
 ### Pull Request / Merge Request
 
