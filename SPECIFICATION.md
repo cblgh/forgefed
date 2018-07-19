@@ -84,10 +84,10 @@ If Server B is polite, it POST a notification to the inbox of source server (e.g
 
 ```json
 {
-  message-type: 'fork',
-  source-url: 'https://server-a.net/user-a/bar',
-  destination-url: 'https://server-b.net/user-b/bar',
-  timestamp: '2018-06-06T12:21:32.000Z'
+  "message-type": "fork",
+  "source-url": "https://server-a.net/user-a/bar",
+  "destination-url": "https://server-b.net/user-b/bar",
+  "timestamp": "2018-06-06T12:21:32.000Z"
 }
 ```
 
@@ -105,13 +105,13 @@ Say if the repository https://server-a.net/user-a/bar subscribes to the fork des
 
 ```json
 {
-  message-type: 'push',
-  url: 'https://server-b.net/user-b/bar',?
-  vcs-type: 'git',
-  vcs-url: 'https://server-b.net/user-b/bar.git',
-  vcs-spec: 'master',
-  vcs-data: 'some-commit-hash'
-  timestamp: '2018-06-08T13:24:12.000Z'
+  "message-type": "push",
+  "url": "https://server-b.net/user-b/bar",
+  "vcs-type": "git",
+  "vcs-url": "https://server-b.net/user-b/bar.git",
+  "vcs-spec": "master",
+  "vcs-data": "some-commit-hash",
+  "timestamp": "2018-06-08T13:24:12.000Z"
 }
 ```
 
@@ -146,12 +146,12 @@ Server A could then update the fork's history state. (E.g. by `git fetch`).
 
     ```json
     {
-      message-type: 'merge-request',
-      source-url: 'https://server-b.net/lennon/hello.git',
-      source-spec: 'awesome',
-      source-data: 'git-commit-hash-or-vcs-identifier',
-      destination-url: 'https://server-a.net/foobar/hello.git',
-      destination-spec: 'master'
+      "message-type": "awesome",
+      "source-url": "https://server-b.net/lennon/hello.git",
+      "source-spec": "awesome",
+      "source-data": "git-commit-hash-or-vcs-identifier",
+      "destination-url": "https://server-a.net/foobar/hello.git",
+      "destination-spec": "master"
     }
     ```
 
@@ -159,14 +159,14 @@ Server A could then update the fork's history state. (E.g. by `git fetch`).
 
     ```json
     {
-      status: 'pending',
-      request: {
-        message-type: 'merge-request',
-        source-url: 'https://server-b.net/lennon/hello.git',
-        source-spec: 'awesome',
-        source-data: 'git-commit-hash-or-vcs-identifier',
-        destination-url: 'https://server-a.net/foobar/hello.git',
-        destination-spec: 'master'
+      "status": "pending",
+      "request": {
+        "message-type": "awesome",
+        "source-url": "https://server-b.net/lennon/hello.git",
+        "source-spec": "awesome",
+        "source-data": "git-commit-hash-or-vcs-identifier",
+        "destination-url": "https://server-a.net/foobar/hello.git",
+        "destination-spec": "master"
       }
     }
     ```
@@ -183,13 +183,13 @@ Server A could then update the fork's history state. (E.g. by `git fetch`).
 
     ```json
     {
-      message-type: 'merge-consideration',
-      url: 'https://server-a.net/foobar/hello/pull/123',
-      source-url: 'https://server-b.net/lennon/hello.git',
-      source-spec: 'awesome',
-      source-data: 'git-commit-hash-or-vcs-identifier',
-      destination-url: 'https://server-a.net/foobar/hello.git',
-      destination-spec: 'master'
+      "message-type": "awesome",
+      "url": "https://server-a.net/foobar/hello/pull/123",
+      "source-url": "https://server-b.net/lennon/hello.git",
+      "source-spec": "awesome",
+      "source-data": "git-commit-hash-or-vcs-identifier",
+      "destination-url": "https://server-a.net/foobar/hello.git",
+      "destination-spec": "master"
     }
     ```
 
@@ -205,11 +205,11 @@ Server A could then update the fork's history state. (E.g. by `git fetch`).
 
     ```json
     {
-      message-type: 'merge-request',
-      source-url: 'https://my-homeserver.net/my-repo.git',
-      destination-url: 'https://your-homeserver.net/your-repo.git',
-      patch-data: 'a-commit-ish-identifier',
-      append-to: 'https://your-homeserver.net/your-repo.git/issues/42'
+      "message-type": "awesome",
+      "source-url": "https://my-homeserver.net/my-repo.git",
+      "destination-url": "https://your-homeserver.net/your-repo.git",
+      "patch-data": "a-commit-ish-identifier",
+      "append-to": "https://your-homeserver.net/your-repo.git/issues/42"
     }
     ```
 
@@ -224,10 +224,10 @@ Server A could then update the fork's history state. (E.g. by `git fetch`).
 
     ```json
     {
-      message-type: 'merge',
-      source-url: 'https://my-homeserver.net/my-repo.git',
-      destination-url: 'https://your-homeserver.net/your-repo.git',
-      append-to: 'https://your-homeserver.net/your-repo.git/issues/42'
+      "message-type": "merge",
+      "source-url": "https://my-homeserver.net/my-repo.git",
+      "destination-url": "https://your-homeserver.net/your-repo.git",
+      "append-to": "https://your-homeserver.net/your-repo.git/issues/42"
     }
     ```
 
